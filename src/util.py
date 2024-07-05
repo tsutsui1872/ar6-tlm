@@ -3,10 +3,10 @@ import pathlib
 import urllib.request
 from datetime import datetime
 import numpy as np
+import pandas as pd
 from netCDF4 import Dataset
 
 from src import MyExecError
-from mce.util.io import write_nc
 
 logger = logging.getLogger(__name__)
 
@@ -243,3 +243,45 @@ def df2nc(path, df, var_atts, gatts={}, new=False, with_reopen=None):
 
     if with_reopen is not None:
         return Dataset(path, with_reopen)
+
+
+def dffilter(df, dropna=False, **kw):
+    """Filter time series data in pandas.DataFrame
+    Filtering conditions are given by keyword=cond,
+    where keyword is a name of multiIndex or a name of columns,
+    depending on the type of input DataFrame,
+    and cond is list, callable, or str.
+
+    Parameters
+    ----------
+    df
+        Time series data in pandas.DataFrame
+    dropna, optional
+        If true, time points are dropped when all values are nan
+
+    Returns
+    -------
+        Filtered data
+    """
+    bl = pd.Series(True, df.index)
+    is_midx = isinstance(df.index, pd.MultiIndex)
+
+    for k, v in kw.items():
+        if is_midx:
+            d1 = pd.Series(df.index.get_level_values(k), index=df.index)
+        else:
+            d1 = df[k]
+
+        if isinstance(v, list):
+            bl = bl & d1.transform(lambda x: x in v)
+        elif callable(v):
+            bl = bl & d1.transform(v)
+        else:
+            bl = bl & (d1 == v)
+
+    if dropna:
+        ret = df.loc[bl].dropna(axis=1, how='all')
+    else:
+        ret = df.loc[bl]
+
+    return ret
