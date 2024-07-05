@@ -143,7 +143,7 @@ def write_nc(path, var_dict, gatts, dim_unlimited='time'):
                 continue
             dim_dict[name] = size if name != dim_unlimited else None
 
-    ncf = netCDF4.Dataset(path, 'w')
+    ncf = Dataset(path, 'w')
 
     for name, size in dim_dict.items():
         ncf.createDimension(name, size)

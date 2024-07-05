@@ -161,5 +161,11 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# input data are basically obtained from external repositories
 datain/
+
+# exclude large files in NetCDF format 
+dataout/*.nc
+
+# untracked files
 untracked/
