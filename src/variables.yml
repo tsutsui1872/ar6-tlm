@@ -1,0 +1,119 @@
+#
+# Two-layer model parameters
+#
+q2x:
+  long_name: Doubling CO2 forcing
+  units: W m-2
+q4x:
+  long_name: Quadrupling CO2 forcing
+  units: W m-2
+lamg:
+  long_name: Climate feedback parameter
+  units: W m-2 K-1
+cmix:
+  long_name: Heat capacity of the surface layer; divided by annual total seconds
+  units: J m-2 K-1 s-1
+cdeep:
+  long_name: Heat capacity of the deep-ocean layer; divided by annual total seconds
+  units: J m-2 K-1 s-1
+gamma_2l:
+  long_name: Heat transfer coefficient between the surface and deep-ocean layers
+  units: W m-2 K-1
+eff:
+  long_name: Efficacy of deep-ocean heat uptake
+  units: dimensionless
+co2_beta:
+  long_name: CO2 forcing amplification factor
+  units: dimensionless
+a0:
+  long_name: Impulse response amplitude (fast mode)
+  units: dimensionless
+a1:
+  long_name: Impulse response amplitude (slow mode)
+  units: dimensionless
+tau0:
+  long_name: Time scale of fast mode
+  units: yr
+tau1:
+  long_name: Time scale of slow mode
+  units: yr
+ecs:
+  long_name: Equilibrium climate sensitivity
+  units: K
+tcr:
+  long_name: Transient climate response
+  units: K
+#
+# Two-layer model variables
+#
+hflux:
+  long_name: Top-of-the-atmosphere net energy flux (positive downward)
+  units: W m-2
+tg:
+  long_name: Surface temperature change
+  units: K
+ohc:
+  long_name: Heat content change
+  units: ZJ
+erf:
+  long_name: Total effective radiative forcing
+  units: W m-2
+erf_co2:
+  long_name: CO2 effective radiative forcing
+  units: W m-2
+#
+# Constraining indicators
+#
+GSAT_1995_2014:
+  long_name: Surface temperature in 1995-2014 relative to 1850-1900
+  units: K
+GSAT_recent_trend:
+  long_name: Surface temperature change from 1961-1990 to 1995-2014
+  units: K
+OHU_1971_2018:
+  long_name: Ocean heat content change from 1971 to 2018
+  units: ZJ
+#
+# FaIR samples of AR6 Chapter 7
+# results from notebooks/150_WG3_run_large_fair_ensemble.ipynb
+#
+AF:
+  long_name: Airborne fraction of accumulated CO2 emissions
+  units: K
+C_CO2:
+  long_name: Atmospheric CO2 concentration
+  units: ppm
+F_ERFaci:
+  long_name: ERF of aerosol-cloud interactions
+  units: W/m2
+F_ERFari:
+  long_name: ERF of aerosol-radiation interactions
+  units: W/m2
+F_O3:
+  long_name: ERF of ozone
+  units: W/m2
+F_anthro:
+  long_name: ERF of anthropogenic forcings
+  units: W/m2
+F_total:
+  long_name: ERF of total forcing
+  units: W/m2
+OHU:
+  long_name: Ocean heat uptake
+  units: J
+T:
+  long_name: Surface temperature change
+  units: K
+#
+# FaIR 1pctCO2 run samples of AR6 Chapter 7
+# results from notebooks/160_WG3_constrain_fair_samples.ipynb
+#
+af70:
+  long_name: Airborne fraction of accumulated CO2 emissions in the 70th year
+  units: dimensionless
+af140:
+  long_name: Airborne fraction of accumulated CO2 emissions in the 140th year
+  units: dimensionless
+tcre70_unscale:
+  long_name: Transient climate response to cumulative CO2 emissions in the 70th year
+  units: K (1000 Gt C)-1
