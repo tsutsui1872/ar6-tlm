@@ -1,0 +1,98 @@
+import numpy as np
+import pandas as pd
+
+from mce.util.plot_base import PlotBase
+
+class MyPlot(PlotBase):
+    def plot_quantile_range(self, dfin, axes=None, **kw):
+        nlevels = dfin.columns.nlevels
+
+        if nlevels == 2:
+            dfin = pd.concat({'dummy': dfin}, axis=1).reorder_levels([1, 0, 2], axis=1)
+
+        mi = dfin.columns.remove_unused_levels()
+
+        parm_order = kw.get('parm_order', mi.levels[0].tolist())
+        group_order = kw.get('group_order', mi.levels[1].tolist())
+        member_order = kw.get('member_order', mi.levels[2].tolist())
+        map_color = kw.get(
+            'map_color',
+            {k: f'C{i}' for i, k in enumerate(member_order)},
+        )
+        map_name_unit = kw.get('map_name_unit', {})
+        shrink = kw.get('shrink', 0.7)
+
+        kw_space = kw.get(
+            'kw_space',
+            {'height': 1.5, 'aspect': 2.5, 'wspace': 1.2},
+        )
+        col = kw.get('col', 1)
+
+        nparms = len(parm_order)
+        ngroups = len(group_order)
+        nmembers = len(member_order)
+        colors = [map_color[member] for member in member_order] * ngroups
+
+        yvals = np.arange(ngroups * nmembers)[::-1].reshape((-1, nmembers)) + 0.5
+        ym = yvals.mean(axis=1)
+        yvals = ((yvals - ym[:, None]) * shrink + ym[:, None]).ravel()
+
+        if axes is None:
+            if 'extend' in kw_space:
+                self.init_general(**kw_space)
+            else:
+                self.init_regular(nparms, col, kw_space=kw_space)
+
+            axes = self()
+
+        mi = pd.MultiIndex.from_product([group_order, member_order])
+
+        for ax, pn in zip(axes, parm_order):
+            df = dfin[pn].reindex(columns=mi)
+            ax.hlines(
+                yvals, df.loc['very_likely__lower'], df.loc['very_likely__upper'],
+                color=colors, lw=1., zorder=1,
+            )
+            ax.hlines(
+                yvals, df.loc['likely__lower'], df.loc['likely__upper'],
+                color=colors, lw=4., zorder=1,
+            )
+            ax.scatter(
+                df.loc['central'], yvals,
+                marker='o', facecolor='w', edgecolors=colors,
+            )
+            ax.set_yticks(ym)
+            if nlevels == 3:
+                ax.set_yticklabels(group_order)
+                ax.tick_params(axis='y', labelleft=True, left=False)
+            else:
+                ax.tick_params(axis='y', labelleft=False, left=False)
+
+            ax.set_ylim(0, ngroups*nmembers)
+            ax.spines['left'].set_visible(False)
+
+            name, unit = map_name_unit.get(pn, (pn, ''))
+            if unit != '':
+                ax.set_xlabel(f'{name} ({unit})')
+            else:
+                ax.set_xlabel(name)
+
+            ax.grid(axis='x')
+
+        handles = [
+            mpl.lines.Line2D([0, 1], [0, 0], color=color, lw=1.5)
+            for color in colors[:nmembers]
+        ] + [
+            mpl.patches.Patch(alpha=0, linewidth=0),
+            mpl.lines.Line2D([0], [0], ls='None', marker='o', mec='k', mfc='w'),
+            mpl.lines.Line2D([0, 1], [0, 0], color='k', lw=3., solid_capstyle='butt'),
+            mpl.lines.Line2D([0, 1], [0, 0], color='k', lw=1., ls='-'),
+        ]
+        labels = member_order + ['', 'Central', 'likely (66%)', 'very likely (90%)']
+
+        kw_legend = kw.get('kw_legend', {
+            'loc': 'upper left',
+            'bbox_to_anchor': self.get_fig_position_relto_axes((1.07, 0.98)),
+        })
+
+        self.figure.legend(handles, labels, **kw_legend)
