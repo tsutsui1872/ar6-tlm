@@ -1,9 +1,49 @@
 import numpy as np
 import pandas as pd
+import matplotlib as mpl
 
 from mce.util.plot_base import PlotBase
 
 class MyPlot(PlotBase):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+
+        self.map_qpoint = {
+            0.05: 'very_likely__lower',
+            0.17: 'likely__lower',
+            0.5: 'central',
+            0.83: 'likely__upper',
+            0.95: 'very_likely__upper',
+        }
+        self.map_qpoint_2 = {
+            'Q05': 'very_likely__lower',
+            'Q17': 'likely__lower',
+            'Q50': 'central',
+            'Q83': 'likely__upper',
+            'Q95': 'very_likely__upper',
+        }
+        self.map_scenario = {
+            'ssp119': 'SSP1-1.9',
+            'ssp126': 'SSP1-2.6',
+            'ssp245': 'SSP2-4.5',
+            'ssp370': 'SSP3-7.0',
+            'ssp585': 'SSP5-8.5',
+        }
+        self.map_method = {
+            'ar6_orig': '#0 EBM-ε AR6 orig',
+            'ar6': '#1 EBM-ε AR6',
+            's21': '#2 EBM-ε S21',
+            'mce-2l': '#3 MCE-2l',
+        }
+        self.map_color = {
+            'Constrained CMIP6': 'C7',
+            'ECS-TCR mapped emulator': 'C6',
+            '#0 EBM-ε AR6 orig': 'C9',
+            '#1 EBM-ε AR6': 'C0',
+            '#2 EBM-ε S21': 'C2',
+            '#3 MCE-2l': 'C1',
+        }
+
     def plot_quantile_range(self, dfin, axes=None, **kw):
         nlevels = dfin.columns.nlevels
 
@@ -80,19 +120,21 @@ class MyPlot(PlotBase):
             ax.grid(axis='x')
 
         handles = [
-            mpl.lines.Line2D([0, 1], [0, 0], color=color, lw=1.5)
+            mpl.lines.Line2D([0], [0], color=color, lw=1.5)
             for color in colors[:nmembers]
         ] + [
             mpl.patches.Patch(alpha=0, linewidth=0),
             mpl.lines.Line2D([0], [0], ls='None', marker='o', mec='k', mfc='w'),
-            mpl.lines.Line2D([0, 1], [0, 0], color='k', lw=3., solid_capstyle='butt'),
-            mpl.lines.Line2D([0, 1], [0, 0], color='k', lw=1., ls='-'),
+            mpl.lines.Line2D([0], [0], color='k', lw=3., solid_capstyle='butt'),
+            mpl.lines.Line2D([0], [0], color='k', lw=1., ls='-'),
         ]
         labels = member_order + ['', 'Central', 'likely (66%)', 'very likely (90%)']
 
         kw_legend = kw.get('kw_legend', {
             'loc': 'upper left',
-            'bbox_to_anchor': self.get_fig_position_relto_axes((1.07, 0.98)),
+            'bbox_to_anchor': (1.07, 0.98),
         })
-
+        kw_legend['bbox_to_anchor'] = self.get_fig_position_relto_axes(
+            kw_legend['bbox_to_anchor'],
+        )
         self.figure.legend(handles, labels, **kw_legend)
