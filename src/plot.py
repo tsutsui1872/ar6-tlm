@@ -8,14 +8,14 @@ class MyPlot(PlotBase):
     def __init__(self, **kw):
         super().__init__(**kw)
 
-        self.map_qpoint = {
+        self.map_probability = {
             0.05: 'very_likely__lower',
             0.17: 'likely__lower',
             0.5: 'central',
             0.83: 'likely__upper',
             0.95: 'very_likely__upper',
         }
-        self.map_qpoint_2 = {
+        self.map_probability_q = {
             'Q05': 'very_likely__lower',
             'Q17': 'likely__lower',
             'Q50': 'central',
@@ -42,9 +42,34 @@ class MyPlot(PlotBase):
             '#1 EBM-ε AR6': 'C0',
             '#2 EBM-ε S21': 'C2',
             '#3 MCE-2l': 'C1',
+            'Reference': 'C3',
         }
 
     def plot_quantile_range(self, dfin, axes=None, **kw):
+        """Make quantile range plot
+
+        Parameters
+        ----------
+        dfin
+            Input DataFrame indexed with 'central', 'likely__lower/upper',
+            and 'very_likely__lower/upper' on axis 0, and with two or three
+            levels on axis 1. The axis 1 levels are the parameters, groups,
+            and members in order, and a dummy group will be created in the
+            case of two-level axis.
+        axes, optional
+            An array-like of Axes object, by default None, in which case
+            created internally.
+        kw, optional control parameters as follows
+            parm_order
+            group_order
+            member_order
+            map_color
+            map_name_unit
+            shrink
+            kw_space
+            col
+            kw_legend
+        """
         nlevels = dfin.columns.nlevels
 
         if nlevels == 2:
