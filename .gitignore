@@ -166,6 +166,7 @@ datain/
 
 # exclude large files in NetCDF format 
 dataout/*.nc
+dataout/*.h5
 
 # untracked files
 untracked/
