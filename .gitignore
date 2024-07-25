@@ -162,7 +162,8 @@ cython_debug/
 #.idea/
 
 # input data are basically obtained from external repositories
-datain/
+datain/*
+!datain/note.txt
 
 # exclude large files in NetCDF format 
 dataout/*.nc

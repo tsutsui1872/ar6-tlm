@@ -25,6 +25,12 @@ Post-process notebooks create diagrams to diagnose the results, which are saved 
 TLMs and relevant forcing schemes are built on [MCE (Minimal CMIP Emulator)](https://github.com/tsutsui1872/mce).
 Directory [src](src) contains TLM modules and other utilities.
 
+Input data from external repositories are retrieved from the Internet and saved in local [datain](datain) directory during execution.
+Two notebooks, [010_cmip6_preprocess](notebook/010_cmip6_preprocess.ipynb) and [070_constraining_fair](notebook/070_constraining_fair.ipynb), require additional data, not provided in this repository; the one for CMIP6 global mean data based on datasets from the [Earth System Grid Federation](https://esgf.llnl.gov/) and the other for large samples generated with [AR6 Chapter 7 code](https://github.com/IPCC-WG1/Chapter-7).
+
+Output data are saved in [dataout](dataout) directory.
+In this repository, however, the output files are limited to those in text format with relatively small size.
+
 The above notebooks and associated modules require the following packages:
 - numpy
 - scipy (stats and interpolate)
