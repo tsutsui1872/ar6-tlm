@@ -20,4 +20,26 @@ Notebook | Description
 [082_constrained_runs_ch4](notebook/082_constrained_runs_ch4.ipynb) | Replication of the AR6 Chapter 4 assessment
 [084_postproc](notebook/084_postproc.ipynb) | Post-process of the constrained runs
 
-The post-process notebooks generate figures to diagnose the results, which are saved in [image](image) directory.
+Post-process notebooks create diagrams to diagnose the results, which are saved in [image](image) directory.
+
+TLMs and relevant forcing schemes are built on [MCE (Minimal CMIP Emulator)](https://github.com/tsutsui1872/mce).
+Directory [src](src) contains TLM modules and other utilities.
+
+The above notebooks and associated modules require the following packages:
+- numpy
+- scipy (stats and interpolate)
+- pandas
+- matplotlib
+- netCDF4
+- h5py
+- openpyxl
+- json
+- yaml
+
+Some versions of these packages may affect execution and resulting figures.
+The outputs included in the above notebooks were resulted with the following versions:
+- python 3.7.10
+- numpy 1.20.2
+- scipy 1.6.3
+- pandas 1.2.4
+- matplotlib 3.4.2
